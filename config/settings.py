@@ -11,9 +11,17 @@ class Settings:
     API_HOST = os.getenv('API_HOST', 'https://www.staging.scorebuddy.co.uk/1777161849/api/v1')
     
     # OAuth2 Configuration
-    CLIENT_ID = os.getenv('CLIENT_ID', 'saurabh')
-    CLIENT_SECRET = os.getenv('CLIENT_SECRET', '356e674dc5f9b4a2f8a535a7d48fae4140bd4a4f79ca6f8afcda29b8d3ece914')
-    SCOPE = os.getenv('SCOPE', 'staff:read users:read teams:read groups:read scores:read scorecards:read')
+    CLIENT_ID = os.getenv('CLIENT_ID')
+    CLIENT_SECRET = os.getenv('CLIENT_SECRET')
+    SCOPE = os.getenv('SCOPE', 
+        'staff:read staff:write staff:delete '
+        'users:read users:write users:delete '
+        'teams:read teams:write teams:delete '
+        'groups:read groups:write groups:delete '
+        'scores:read '
+        'scorecards:read '
+        'integrations:read integrations:write integrations:delete'
+    )
     
     # Authentication endpoint
     AUTH_ENDPOINT = '/authorisation/token'
@@ -33,7 +41,12 @@ class Settings:
                 missing.append(setting)
         
         if missing:
-            raise ValueError(f"Missing required settings: {', '.join(missing)}")
+            error_msg = f"Missing required environment variables: {', '.join(missing)}\n"
+            error_msg += "Please create a .env file with the following variables:\n"
+            error_msg += "API_HOST=your_api_host\n"
+            error_msg += "CLIENT_ID=your_client_id\n"
+            error_msg += "CLIENT_SECRET=your_client_secret"
+            raise ValueError(error_msg)
         
         return True
 
