@@ -13,6 +13,9 @@ class BaseResourceTest(HttpUser):
     
     def on_start(self):
         """Called when a user starts. Set up authentication."""
+        # Set timeout for all requests to prevent hanging
+        self.client.timeout = 10  # 10 second timeout
+        
         token = token_manager.get_shared_token(self.client)
         if token:
             self.client.headers.update({
@@ -39,7 +42,7 @@ class BaseResourceTest(HttpUser):
     def put_resource(self, endpoint, data, resource_name="resource"):
         """Generic PUT request handler"""
         response = self.client.put(endpoint, json=data)
-        if response.status_code not in [200, 204]:
+        if response.status_code not in [200, 201, 204]:
             print(f"{resource_name} PUT failed: {response.status_code} - {response.text}")
         return response
     
