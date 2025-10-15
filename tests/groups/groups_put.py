@@ -149,3 +149,84 @@ class GroupsPutTest(BaseResourceTest):
             print(f"⚠ Validation error (expected): {response.status_code}")
         else:
             print(f"✗ Unexpected status: {response.status_code}")
+    
+    @task(1)
+    @tag('put', 'groups', 'full_data')
+    def test_put_with_all_fields(self):
+        """Test PUT with all available group fields"""
+        # Check if we should stop creating new requests
+        if self._should_stop_creating_requests():
+            elapsed = time.time() - self._test_start_time
+            print(f"⏰ Stopping full data requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            return
+        
+        group_name = self._get_unique_group_name("FullDataGroup")
+        
+        # Test with all available fields
+        full_data = {
+            "group_name": group_name,
+            "description": f"Complete group with all fields: {group_name}",
+            "location": "Test Location, Test City",
+            "notes": f"Test notes for {group_name} - created via API",
+            "deleted": False
+        }
+        
+        print(f"Testing PUT with all fields: {group_name}")
+        try:
+            response = self.put_resource("/groups", full_data, f"Full Data Test {group_name}")
+            print(f"PUT full data response received: {response.status_code}")
+        except Exception as e:
+            print(f"✗ PUT full data request failed with exception: {e}")
+            return
+        
+        if response.status_code in [200, 201, 204]:
+            print(f"✓ Full data test succeeded: {response.status_code}")
+            
+            # Extract group ID and delete immediately
+            group_id = self._extract_group_id_from_response(response)
+            if group_id:
+                self._delete_group(group_id)
+            else:
+                print(f"⚠ Could not extract group ID from full data response for {group_name}")
+        else:
+            print(f"✗ Full data test failed: {response.status_code}")
+    
+    @task(1)
+    @tag('put', 'groups', 'location_notes')
+    def test_put_with_location_and_notes(self):
+        """Test PUT with location and notes fields"""
+        # Check if we should stop creating new requests
+        if self._should_stop_creating_requests():
+            elapsed = time.time() - self._test_start_time
+            print(f"⏰ Stopping location/notes requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            return
+        
+        group_name = self._get_unique_group_name("LocationGroup")
+        
+        # Test with location and notes
+        location_data = {
+            "group_name": group_name,
+            "description": f"Group with location and notes: {group_name}",
+            "location": f"Office {random.randint(1, 10)}, Floor {random.randint(1, 5)}",
+            "notes": f"Special notes for {group_name} - testing location functionality"
+        }
+        
+        print(f"Testing PUT with location and notes: {group_name}")
+        try:
+            response = self.put_resource("/groups", location_data, f"Location Test {group_name}")
+            print(f"PUT location response received: {response.status_code}")
+        except Exception as e:
+            print(f"✗ PUT location request failed with exception: {e}")
+            return
+        
+        if response.status_code in [200, 201, 204]:
+            print(f"✓ Location test succeeded: {response.status_code}")
+            
+            # Extract group ID and delete immediately
+            group_id = self._extract_group_id_from_response(response)
+            if group_id:
+                self._delete_group(group_id)
+            else:
+                print(f"⚠ Could not extract group ID from location response for {group_name}")
+        else:
+            print(f"✗ Location test failed: {response.status_code}")
