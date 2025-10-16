@@ -25,7 +25,8 @@ class TokenManager:
             
             # Need to authenticate
             print("Authenticating to get shared token...")
-            auth_response = client.post(settings.AUTH_ENDPOINT, json={
+            auth_url = f"{settings.API_HOST}{settings.AUTH_ENDPOINT}"
+            auth_response = client.post(auth_url, json={
                 "grant_type": "client_credentials",
                 "client_id": settings.CLIENT_ID,
                 "client_secret": settings.CLIENT_SECRET,
