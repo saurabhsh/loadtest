@@ -41,9 +41,13 @@ class UsersPutTest(BaseResourceTest):
     
     def _get_unique_email(self, prefix="testuser"):
         """Generate a unique email address"""
-        timestamp = int(time.time() * 1000) % 100000
-        random_num = random.randint(1000, 9999)
-        return f"{prefix}_{timestamp}_{random_num}@example.com"
+        # Use full timestamp without modulo to avoid collisions
+        timestamp = int(time.time() * 1000000)  # Microseconds for better precision
+        # Include instance ID for uniqueness across concurrent Locust users
+        instance_id = id(self) % 100000  # Unique per instance, modulo for shorter email
+        # Larger random number range for better uniqueness
+        random_num = random.randint(10000, 99999)
+        return f"{prefix}_{instance_id}_{timestamp}_{random_num}@example.com"
     
     def _get_random_group_ids(self, count=1):
         """Get random group IDs from valid groups (32-37)"""
@@ -56,6 +60,17 @@ class UsersPutTest(BaseResourceTest):
         if count >= len(self._team_ids):
             return self._team_ids.copy()
         return random.sample(self._team_ids, count)
+    
+    def _role_supports_can_audit(self, role):
+        """Check if a role supports can_audit permission"""
+        # can_audit can only be assigned to roles that have both 'score' and 'reports' permissions
+        roles_with_audit = [
+            "score_reports_analytics",
+            "score_calibrate_report_analytics",
+            "reports_analytics",
+            "score_reports"
+        ]
+        return role in roles_with_audit
     
     def _delete_user(self, user_id):
         """Delete a user by ID"""
@@ -100,16 +115,17 @@ class UsersPutTest(BaseResourceTest):
         
         unique_email = self._get_unique_email("upsertuser")
         
+        role = "employee"
         user_data = {
             "first_name": f"Upsert{random.randint(1000, 9999)}",
             "last_name": f"User{random.randint(1000, 9999)}",
             "email_address": unique_email,
-            "role": "employee",
+            "role": role,
             "group_ids": self._get_random_group_ids(random.randint(1, 3)),  # Required: 1-3 random group IDs
             "team_ids": self._get_random_team_ids(random.randint(1, 3)),  # Required: 1-3 random team IDs
             "support_access": random.choice([True, False]),  # Required: boolean
             "billing_access": random.choice([True, False]),  # Required: boolean
-            "can_audit": random.choice([True, False]),  # Required: boolean
+            "can_audit": False,  # Required: boolean - employee role doesn't support can_audit
             "read_only": random.choice([True, False]),  # Required: boolean
             "must_change_password": random.choice([True, False]),  # Required: boolean
             "date_format": random.choice(["DD-MM-YYYY", "MM-DD-YYYY"])  # Required: valid enum value
@@ -176,16 +192,17 @@ class UsersPutTest(BaseResourceTest):
         unique_email = self._get_unique_email("minimaluser")
         
         # Test with minimal required data (all boolean fields and date_format are required)
+        role = "employee"
         minimal_data = {
             "first_name": f"Minimal{random.randint(1000, 9999)}",
             "last_name": f"User{random.randint(1000, 9999)}",
             "email_address": unique_email,
-            "role": "employee",
+            "role": role,
             "group_ids": self._get_random_group_ids(1),  # Required: at least 1 group ID
             "team_ids": self._get_random_team_ids(1),  # Required: at least 1 team ID
             "support_access": False,  # Required: boolean
             "billing_access": False,  # Required: boolean
-            "can_audit": False,  # Required: boolean
+            "can_audit": False,  # Required: boolean - employee role doesn't support can_audit
             "read_only": False,  # Required: boolean
             "must_change_password": False,  # Required: boolean
             "date_format": "MM-DD-YYYY"  # Required: valid enum value (DD-MM-YYYY or MM-DD-YYYY)
@@ -226,16 +243,17 @@ class UsersPutTest(BaseResourceTest):
         unique_email = self._get_unique_email("fulldatauser")
         
         # Test with all available fields
+        role = "employee"
         full_data = {
             "first_name": f"FullData{random.randint(1000, 9999)}",
             "last_name": f"User{random.randint(1000, 9999)}",
             "email_address": unique_email,
-            "role": "employee",
+            "role": role,
             "group_ids": self._get_random_group_ids(random.randint(1, 3)),  # Required: 1-3 random group IDs from valid groups
             "team_ids": self._get_random_team_ids(random.randint(1, 3)),  # Required: 1-3 random team IDs from valid teams
             "support_access": random.choice([True, False]),  # Required: boolean
             "billing_access": random.choice([True, False]),  # Required: boolean
-            "can_audit": random.choice([True, False]),  # Required: boolean
+            "can_audit": False,  # Required: boolean - employee role doesn't support can_audit
             "read_only": random.choice([True, False]),  # Required: boolean
             "must_change_password": random.choice([True, False]),  # Required: boolean
             "date_format": random.choice(["DD-MM-YYYY", "MM-DD-YYYY"])  # Required: valid enum value (DD-MM-YYYY or MM-DD-YYYY)
