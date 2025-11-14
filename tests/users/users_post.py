@@ -219,15 +219,18 @@ class UsersPostTest(BaseResourceTest):
         
         print(f"Creating password for user ID: {user_id}")
         try:
-            response = self.post_resource(f"/users/{user_id}/password", password_data, f"Create User Password {user_id}")
-            print(f"POST password response received: {response.status_code}")
-            
-            if response.status_code in [200, 201]:
-                print(f"✓ Successfully created password for user {user_id}")
-            elif response.status_code == 409:
-                print(f"⚠ Password already exists for user {user_id} (409 Conflict - expected)")
-            else:
-                print(f"✗ Failed to create password for user {user_id}: {response.status_code}")
+            # Use response context manager to control success/failure
+            # 409 Conflict is expected when password already exists, so mark it as success
+            with self.client.post(f"/users/{user_id}/password", json=password_data, catch_response=True) as response:
+                if response.status_code in [200, 201]:
+                    print(f"✓ Successfully created password for user {user_id}")
+                    response.success()
+                elif response.status_code == 409:
+                    print(f"⚠ Password already exists for user {user_id} (409 Conflict - expected)")
+                    response.success()  # Mark 409 as success since it's expected behavior
+                else:
+                    print(f"✗ Failed to create password for user {user_id}: {response.status_code}")
+                    response.failure(f"Unexpected status code: {response.status_code}")
         except Exception as e:
             print(f"✗ POST password request failed with exception: {e}")
     
