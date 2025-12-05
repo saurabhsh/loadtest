@@ -2,13 +2,15 @@ from locust import HttpUser, task
 from config.settings import settings
 from auth.token_manager import token_manager
 
+
 class LoadTestUser(HttpUser):
     """Main Locust user class for load testing"""
     
-    host = settings.API_HOST
-    
     def on_start(self):
         """Called when a user starts. Set up authentication."""
+        # Set the client's base URL directly from settings
+        self.client.base_url = settings.API_HOST
+        
         token = token_manager.get_shared_token(self.client)
         if token:
             self.client.headers.update({

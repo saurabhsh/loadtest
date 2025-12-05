@@ -104,10 +104,11 @@ class GroupsGetTest(BaseResourceTest):
         
         for params in query_params:
             try:
-                response = self.client.get("/groups", params=params)
-                print(f"Groups with params {params}: {response.status_code}")
-                
-                if response.status_code not in [200, 400, 422]:  # 400/422 might be expected for invalid params
-                    print(f"Unexpected status for params {params}: {response.text}")
+                response = self.get_resource_with_params("/groups", params, f"Groups with params {params}")
+                if response:
+                    print(f"Groups with params {params}: {response.status_code}")
+                    
+                    if response.status_code not in [200, 400, 422]:  # 400/422 might be expected for invalid params
+                        print(f"Unexpected status for params {params}: {response.text}")
             except Exception as e:
                 print(f"Error testing groups with params {params}: {e}")

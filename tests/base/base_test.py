@@ -9,32 +9,57 @@ from auth.token_manager import token_manager
 class BaseResourceTest(HttpUser):
     """Base class for all resource tests with common functionality"""
     abstract = True
-    host = settings.API_HOST
     
     def on_start(self):
         """Called when a user starts. Set up authentication."""
-        # Set timeout for all requests to prevent hanging
-        self.client.timeout = 10  # 10 second timeout
+        # Set the client's base URL directly from settings
+        self.client.base_url = settings.API_HOST
+        self.client.timeout = 10
         
         token = token_manager.get_shared_token(self.client)
         if token:
             self.client.headers.update({
                 "Authorization": f"Bearer {token}",
                 "Content-Type": "application/json",
-                "Accept": "application/json"  # Explicitly request JSON responses
+                "Accept": "application/json"
             })
         else:
-            print("Failed to get authentication token")
+            print("Failed to get authentication token - check CLIENT_ID, CLIENT_SECRET, and API_HOST in .env file")
+    
+    def _ensure_headers_set(self):
+        """Ensure authentication headers are set before making requests"""
+        if 'Authorization' not in self.client.headers:
+            # Try to get token again
+            token = token_manager.get_shared_token(self.client)
+            if token:
+                self.client.headers.update({
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                })
+            else:
+                print("⚠ Warning: No authentication token available - requests will fail")
+                return False
+        return True
     
     def get_resource(self, endpoint, resource_name="resource"):
         """Generic GET request handler"""
+        self._ensure_headers_set()
         response = self.client.get(endpoint)
         if response.status_code != 200:
             print(f"{resource_name} GET failed: {response.status_code} - {response.text}")
         return response
     
+    def get_resource_with_params(self, endpoint, params, resource_name="resource"):
+        """Generic GET request handler with query parameters"""
+        if not self._ensure_headers_set():
+            return None
+        response = self.client.get(endpoint, params=params)
+        return response
+    
     def post_resource(self, endpoint, data, resource_name="resource"):
         """Generic POST request handler"""
+        self._ensure_headers_set()
         response = self.client.post(endpoint, json=data)
         if response.status_code not in [200, 201]:
             print(f"{resource_name} POST failed: {response.status_code} - {response.text}")
@@ -42,6 +67,7 @@ class BaseResourceTest(HttpUser):
     
     def put_resource(self, endpoint, data, resource_name="resource"):
         """Generic PUT request handler"""
+        self._ensure_headers_set()
         response = self.client.put(endpoint, json=data)
         if response.status_code not in [200, 201, 204]:
             print(f"{resource_name} PUT failed: {response.status_code} - {response.text}")
@@ -49,6 +75,7 @@ class BaseResourceTest(HttpUser):
     
     def delete_resource(self, endpoint, resource_name="resource"):
         """Generic DELETE request handler"""
+        self._ensure_headers_set()
         response = self.client.delete(endpoint)
         if response.status_code not in [200, 204]:
             print(f"{resource_name} DELETE failed: {response.status_code} - {response.text}")

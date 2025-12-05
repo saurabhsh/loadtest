@@ -9,10 +9,11 @@ from auth.token_manager import token_manager
 class UsersDeleteTest(HttpUser):
     """Load tests for Users API DELETE endpoints"""
     
-    host = settings.API_HOST
-    
     def on_start(self):
         """Called when a user starts. Set up authentication."""
+        # Set the client's base URL directly from settings
+        self.client.base_url = settings.API_HOST
+        
         token = token_manager.get_shared_token(self.client)
         if token:
             self.client.headers.update({

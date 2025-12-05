@@ -2,13 +2,13 @@ import os
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
+load_dotenv(override=True, encoding='utf-8-sig')
 
 class Settings:
     """Configuration settings for the load testing application"""
     
     # API Configuration
-    API_HOST = os.getenv('API_HOST', 'https://www.staging.scorebuddy.co.uk/1777161849/api/v1')
+    API_HOST = os.getenv('API_HOST')
     
     # OAuth2 Configuration
     CLIENT_ID = os.getenv('CLIENT_ID')

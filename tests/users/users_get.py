@@ -136,11 +136,12 @@ class UsersGetTest(BaseResourceTest):
         
         for params in query_params:
             try:
-                response = self.client.get("/users", params=params)
-                print(f"Users with params {params}: {response.status_code}")
-                
-                if response.status_code not in [200, 400, 422]:  # 400/422 might be expected for invalid params
-                    print(f"Unexpected status for params {params}: {response.text}")
+                response = self.get_resource_with_params("/users", params, f"Users with params {params}")
+                if response:
+                    print(f"Users with params {params}: {response.status_code}")
+                    
+                    if response.status_code not in [200, 400, 422]:  # 400/422 might be expected for invalid params
+                        print(f"Unexpected status for params {params}: {response.text}")
             except Exception as e:
                 print(f"Error testing users with params {params}: {e}")
     
