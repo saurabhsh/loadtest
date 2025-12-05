@@ -20,7 +20,8 @@ class BaseResourceTest(HttpUser):
         if token:
             self.client.headers.update({
                 "Authorization": f"Bearer {token}",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Accept": "application/json"  # Explicitly request JSON responses
             })
         else:
             print("Failed to get authentication token")
