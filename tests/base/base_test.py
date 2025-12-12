@@ -12,8 +12,17 @@ class BaseResourceTest(HttpUser):
     
     def on_start(self):
         """Called when a user starts. Set up authentication."""
-        # Set the client's base URL directly from settings
-        self.client.base_url = settings.API_HOST
+        # Respect --host parameter from Locust command line
+        # If --host is provided, self.host is set and self.client.base_url should be set by Locust
+        # Only use settings.API_HOST as fallback if no --host was provided
+        if hasattr(self, 'host') and self.host:
+            # --host parameter was provided, ensure base_url is set from it
+            if not self.client.base_url:
+                self.client.base_url = self.host
+        else:
+            # No --host parameter provided, use settings as fallback
+            self.client.base_url = settings.API_HOST
+        
         self.client.timeout = 10
         
         token = token_manager.get_shared_token(self.client)

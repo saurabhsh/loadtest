@@ -17,10 +17,13 @@ class TokenManager:
     def get_shared_token(self, client):
         """Get a shared token for all users, authenticate only once"""
         
+        # Use the client's base_url (which respects --host parameter) instead of settings.API_HOST
+        # This ensures authentication uses the same host as the test requests
+        current_api_host = client.base_url if client.base_url else settings.API_HOST
+        
         # Check if credentials have changed - if so, clear cached token
         current_client_id = settings.CLIENT_ID
         current_client_secret = settings.CLIENT_SECRET
-        current_api_host = settings.API_HOST
         
         if (self._last_client_id != current_client_id or 
             self._last_client_secret != current_client_secret or
@@ -42,8 +45,8 @@ class TokenManager:
             if self._shared_token and self._token_expires_at and time.time() < self._token_expires_at:
                 return self._shared_token
             
-            # Need to authenticate
-            auth_url = f"{settings.API_HOST}{settings.AUTH_ENDPOINT}"
+            # Need to authenticate - use client's base_url to respect --host parameter
+            auth_url = f"{current_api_host}{settings.AUTH_ENDPOINT}"
             auth_data = {
                 "grant_type": "client_credentials",
                 "client_id": settings.CLIENT_ID,
@@ -67,7 +70,7 @@ class TokenManager:
                     self._token_expires_at = time.time() + expires_in - settings.TOKEN_REFRESH_BUFFER
                     self._last_client_id = settings.CLIENT_ID
                     self._last_client_secret = settings.CLIENT_SECRET
-                    self._last_api_host = settings.API_HOST
+                    self._last_api_host = current_api_host
                     return access_token
                 else:
                     print(f"Access token not found in response")
