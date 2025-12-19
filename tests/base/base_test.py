@@ -99,8 +99,9 @@ class BaseResourceTest(HttpUser):
                 "role": "user"
             },
             "teams": {
-                "name": "Test Team",
-                "description": "Test team description"
+                "team_name": "Test Team",
+                "group_id": 35,
+                "deleted": False
             },
             "staff": {
                 "name": "Test Staff",
