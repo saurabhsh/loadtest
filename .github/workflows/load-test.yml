@@ -1,0 +1,84 @@
+name: Locust Load Test (Safe - GET only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      users:
+        description: "Number of users"
+        required: true
+        default: "5"
+      spawn_rate:
+        description: "Spawn rate (users per second)"
+        required: true
+        default: "1"
+      duration:
+        description: "Duration (e.g. 30s, 1m, 5m)"
+        required: true
+        default: "30s"
+      target:
+        description: "What to run"
+        required: true
+        default: "tests/"
+        type: choice
+        options:
+          - "tests/"
+          - "tests/users/"
+          - "tests/teams/"
+          - "tests/staff/"
+          - "tests/groups/"
+          - "tests/scores/"
+          - "tests/scorecards/"
+          - "tests/integrations/"
+      tags:
+        description: "Locust tags to run (space-separated). Keep 'read' for safe GET-only."
+        required: true
+        default: "read"
+
+jobs:
+  locust:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Make results folder
+        run: mkdir -p results
+
+      - name: Run Locust (headless)
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          API_HOST: ${{ secrets.API_HOST }}
+        run: |
+          locust \
+            -f "${{ github.event.inputs.target }}" \
+            --tags ${{ github.event.inputs.tags }} \
+            --host "${{ secrets.API_HOST }}" \
+            --users "${{ github.event.inputs.users }}" \
+            --spawn-rate "${{ github.event.inputs.spawn_rate }}" \
+            --run-time "${{ github.event.inputs.duration }}" \
+            --headless \
+            --html results/report.html \
+            --csv results/results
+
+      - name: Upload results artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: locust-results
+          path: results/
+          retention-days: 30
+
+
