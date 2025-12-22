@@ -68,21 +68,25 @@ locust -f tests/users/users_post.py --host https://YOUR_HOST --users 50 --spawn-
 Locust stops generating new tasks after `--run-time`, but some requests may still be in-flight.
 `--stop-timeout 180s` lets those finish gracefully (useful for scripts that create and then delete/cleanup).
 
-### Running Specific Resource + HTTP Method
+### Running Specific Resource + HTTP Method in Headless mode (Example commands for 'Staff' endpoint)
 ```bash
-# Run only users GET operations
-locust -f tests/users/users_get.py
+# Run only staff GET operations
+locust -f tests/staff/staff_get.py --host https://www.staging.scorebuddy.co.uk/1848761120/api/v1 --users 50 --spawn-rate 10 --run-time 25s --stop-timeout 180s --headless
 
-# Run only users POST operations
-locust -f tests/users/users_post.py
+# Run only staff POST operations
+locust -f tests/staff/staff_post.py --host https://www.staging.scorebuddy.co.uk/1848761120/api/v1 --users 50 --spawn-rate 10 --run-time 25s --stop-timeout 180s --headless
 
-# Run only teams PUT operations
-locust -f tests/teams/teams_put.py
+# Run only staff PUT operations
+locust -f tests/staff/staff_put.py --host https://www.staging.scorebuddy.co.uk/1848761120/api/v1 --users 50 --spawn-rate 10 --run-time 25s --stop-timeout 180s --headless
 
 # Run only staff DELETE operations
-locust -f tests/staff/staff_delete.py
+locust -f tests/staff/staff_post.py --host https://www.staging.scorebuddy.co.uk/1848761120/api/v1 --users 50 --spawn-rate 10 --run-time 25s --stop-timeout 180s --headless
 ```
-## UI Mode Run
+## Locust UI Mode Run - get rid of '--headless' from the command used to run the tests
+```bash
+# Run only staff GET operations
+locust -f tests/staff/staff_get.py --host https://www.staging.scorebuddy.co.uk/1848761120/api/v1 --users 50 --spawn-rate 10 --run-time 25s --stop-timeout 180s --headless
+```
 Then open http://localhost:8089 in your browser to configure and run the test.
 
 ## GitHub Actions (run tests in the cloud)
