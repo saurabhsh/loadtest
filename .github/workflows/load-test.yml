@@ -35,7 +35,6 @@ on:
           - "tests/users/users_get.py"
           - "tests/users/users_post.py"
           - "tests/users/users_put.py"
-          - "tests/users/users_delete.py"
           - "tests/groups/groups_get.py"
           - "tests/groups/groups_post.py"
           - "tests/groups/groups_put.py"
@@ -43,7 +42,6 @@ on:
           - "tests/integrations/integrations_get.py"
           - "tests/integrations/integrations_post.py"
           - "tests/integrations/integrations_put.py"
-          - "tests/integrations/integrations_delete.py"
           - "tests/scorecards/scorecards_get.py"
           - "tests/scores/scores_get.py"
 
