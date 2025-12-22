@@ -82,10 +82,10 @@ locust -f tests/staff/staff_put.py --host https://www.staging.scorebuddy.co.uk/1
 # Run only staff DELETE operations
 locust -f tests/staff/staff_post.py --host https://www.staging.scorebuddy.co.uk/1848761120/api/v1 --users 50 --spawn-rate 10 --run-time 25s --stop-timeout 180s --headless
 ```
-## Locust UI Mode Run - get rid of '--headless' from the command used to run the tests
+## Locust UI Mode Run
 ```bash
 # Run only staff GET operations
-locust -f tests/staff/staff_get.py --host https://www.staging.scorebuddy.co.uk/1848761120/api/v1 --users 50 --spawn-rate 10 --run-time 25s --stop-timeout 180s --headless
+locust -f tests/staff/staff_get.py --host https://www.staging.scorebuddy.co.uk/1848761120/api/v1
 ```
 Then open http://localhost:8089 in your browser to configure and run the test.
 
