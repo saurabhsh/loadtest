@@ -15,6 +15,10 @@ on:
         description: "Duration (e.g. 30s, 1m, 5m)"
         required: true
         default: "30s"
+      stop_timeout:
+        description: "Graceful shutdown wait time (e.g. 180s). Lets in-flight requests/cleanup finish."
+        required: true
+        default: "180s"
       test_file:
         description: "Which exact test file to run"
         required: true
@@ -77,6 +81,7 @@ jobs:
             --users "${{ github.event.inputs.users }}" \
             --spawn-rate "${{ github.event.inputs.spawn_rate }}" \
             --run-time "${{ github.event.inputs.duration }}" \
+            --stop-timeout "${{ github.event.inputs.stop_timeout }}" \
             --headless \
             --html results/report.html \
             --csv results/results
