@@ -1,4 +1,4 @@
-name: Locust Load Test (Safe - GET only)
+name: Locust Load Test (Run by Endpoints)
 
 on:
   workflow_dispatch:
@@ -15,24 +15,33 @@ on:
         description: "Duration (e.g. 30s, 1m, 5m)"
         required: true
         default: "30s"
-      target:
-        description: "What to run"
+      test_file:
+        description: "Which exact test file to run"
         required: true
-        default: "tests/"
         type: choice
         options:
-          - "tests/"
-          - "tests/users/"
-          - "tests/teams/"
-          - "tests/staff/"
-          - "tests/groups/"
-          - "tests/scores/"
-          - "tests/scorecards/"
-          - "tests/integrations/"
-      tags:
-        description: "Locust tags to run (space-separated). Keep 'read' for safe GET-only."
-        required: true
-        default: "read"
+          - "tests/staff/staff_get.py"
+          - "tests/staff/staff_post.py"
+          - "tests/staff/staff_put.py"
+          - "tests/staff/staff_delete.py"
+          - "tests/teams/teams_get.py"
+          - "tests/teams/teams_post.py"
+          - "tests/teams/teams_put.py"
+          - "tests/teams/teams_delete.py"
+          - "tests/users/users_get.py"
+          - "tests/users/users_post.py"
+          - "tests/users/users_put.py"
+          - "tests/users/users_delete.py"
+          - "tests/groups/groups_get.py"
+          - "tests/groups/groups_post.py"
+          - "tests/groups/groups_put.py"
+          - "tests/groups/groups_delete.py"
+          - "tests/integrations/integrations_get.py"
+          - "tests/integrations/integrations_post.py"
+          - "tests/integrations/integrations_put.py"
+          - "tests/integrations/integrations_delete.py"
+          - "tests/scorecards/scorecards_get.py"
+          - "tests/scores/scores_get.py"
 
 jobs:
   locust:
@@ -63,8 +72,7 @@ jobs:
           API_HOST: ${{ secrets.API_HOST }}
         run: |
           locust \
-            -f "${{ github.event.inputs.target }}" \
-            --tags ${{ github.event.inputs.tags }} \
+            -f "${{ github.event.inputs.test_file }}" \
             --host "${{ secrets.API_HOST }}" \
             --users "${{ github.event.inputs.users }}" \
             --spawn-rate "${{ github.event.inputs.spawn_rate }}" \
@@ -80,5 +88,3 @@ jobs:
           name: locust-results
           path: results/
           retention-days: 30
-
-
