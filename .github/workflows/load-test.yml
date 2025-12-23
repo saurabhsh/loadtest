@@ -27,7 +27,6 @@ on:
           - "tests/staff/staff_get.py"
           - "tests/staff/staff_post.py"
           - "tests/staff/staff_put.py"
-          - "tests/staff/staff_delete.py"
           - "tests/teams/teams_get.py"
           - "tests/teams/teams_post.py"
           - "tests/teams/teams_put.py"

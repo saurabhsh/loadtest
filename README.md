@@ -20,7 +20,7 @@ This repository contains load testing scripts using Locust for API performance t
     - `staff_get.py` - Staff GET operations
     - `staff_post.py` - Staff POST operations
     - `staff_put.py` - Staff PUT operations
-    - `staff_delete.py` - Staff DELETE operations
+    - `staff_delete.py` - Staff DELETE operations (**currently disabled/commented out**; planned for future)
   - `groups/` - Groups API tests (separated by HTTP method)
     - `groups_get.py` - Groups GET operations
     - `groups_post.py` - Groups POST operations
@@ -78,9 +78,6 @@ locust -f tests/staff/staff_post.py --host https://www.staging.scorebuddy.co.uk/
 
 # Run only staff PUT operations
 locust -f tests/staff/staff_put.py --host https://www.staging.scorebuddy.co.uk/1848761120/api/v1 --users 50 --spawn-rate 10 --run-time 25s --stop-timeout 180s --headless
-
-# Run only staff DELETE operations
-locust -f tests/staff/staff_post.py --host https://www.staging.scorebuddy.co.uk/1848761120/api/v1 --users 50 --spawn-rate 10 --run-time 25s --stop-timeout 180s --headless
 ```
 ## Locust UI Mode Run
 ```bash
