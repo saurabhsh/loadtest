@@ -20,6 +20,13 @@ class StaffGetTest(BaseResourceTest):
         """Cache staff IDs from the staff list response"""
         if not self._staff_ids_cached:
             try:
+                # Ensure authentication headers are set before making request
+                if not self._ensure_headers_set():
+                    print("Failed to set authentication headers for caching staff IDs, using fallback IDs")
+                    self._staff_ids = [590, 595, 600, 605, 610, 615, 620, 625, 630, 635]
+                    self._staff_ids_cached = True
+                    return
+                
                 response = self.client.get("/staff")
                 if response.status_code == 200:
                     data = response.json()
@@ -41,7 +48,9 @@ class StaffGetTest(BaseResourceTest):
                         
                         if cached_ids:
                             self._staff_ids = cached_ids
+                            print(f"Cached {len(cached_ids)} staff IDs from API response: {cached_ids[:5]}...")
                         else:
+                            print("No staff IDs found in valid range, using fallback IDs")
                             self._staff_ids = [590, 595, 600, 605, 610, 615, 620, 625, 630, 635]
                     elif isinstance(data, list):
                         cached_ids = []
@@ -57,13 +66,18 @@ class StaffGetTest(BaseResourceTest):
                         
                         if cached_ids:
                             self._staff_ids = cached_ids
+                            print(f"Cached {len(cached_ids)} staff IDs from API response: {cached_ids[:5]}...")
                         else:
+                            print("No staff IDs found in valid range, using fallback IDs")
                             self._staff_ids = [590, 595, 600, 605, 610, 615, 620, 625, 630, 635]
                     else:
+                        print("Unexpected response format, using fallback IDs")
                         self._staff_ids = [590, 595, 600, 605, 610, 615, 620, 625, 630, 635]
                 else:
+                    print(f"Failed to fetch staff list for caching: {response.status_code}")
                     self._staff_ids = [590, 595, 600, 605, 610, 615, 620, 625, 630, 635]
-            except Exception:
+            except Exception as e:
+                print(f"Error caching staff IDs: {e}")
                 self._staff_ids = [590, 595, 600, 605, 610, 615, 620, 625, 630, 635]
             
             self._staff_ids_cached = True
@@ -86,6 +100,7 @@ class StaffGetTest(BaseResourceTest):
             self._cache_staff_ids_from_response()
         
         if not self._staff_ids:
+            print("No staff IDs available for testing, skipping individual staff request")
             return
         
         staff_id = random.choice(self._staff_ids)
@@ -116,5 +131,13 @@ class StaffGetTest(BaseResourceTest):
             {"email_address": "test@example.com"},
         ]
         
-        for params in query_params:
-            self.get_resource_with_params("/staff", params, f"Staff with params {params}")
+        # Pick one random param set per task execution to avoid blocking
+        # This ensures each task execution is fast and respects runtime limits
+        params = random.choice(query_params)
+        try:
+            response = self.get_resource_with_params("/staff", params, f"Staff with params {params}")
+            if response:
+                # Optional: log status if needed for debugging
+                pass
+        except Exception as e:
+            print(f"Error testing staff with params {params}: {e}")
