@@ -144,13 +144,12 @@ class ScoresGetTest(BaseResourceTest):
         print("Testing scores list with query parameters...")
         
         # Test with common query parameters that might be supported
+        # Note: from_last_edit_date and to_last_edit_date are not supported by the API (returns 400 Bad Request)
         query_params = [
             {},  # No params
             {"limit": 10},  # Limit results
             {"offset": 0},  # Pagination
             {"sort": "score_id"},  # Sorting
-            {"from_last_edit_date": "2024-01-01"},  # Date filtering
-            {"to_last_edit_date": "2024-12-31"},  # Date filtering
         ]
         
         for params in query_params:

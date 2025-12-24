@@ -6,11 +6,11 @@ on:
       users:
         description: "Number of users"
         required: true
-        default: "5"
+        default: "50"
       spawn_rate:
         description: "Spawn rate (users per second)"
         required: true
-        default: "1"
+        default: "10"
       duration:
         description: "Duration (e.g. 30s, 1m, 5m)"
         required: true
