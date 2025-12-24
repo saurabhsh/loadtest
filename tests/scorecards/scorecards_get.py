@@ -118,7 +118,7 @@ class ScorecardsGetTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping scorecards list requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping scorecards list requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         print("Attempting to get scorecards list...")
@@ -144,7 +144,7 @@ class ScorecardsGetTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping scorecard by ID requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping scorecard by ID requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         # Ensure we have cached scorecard IDs
@@ -176,7 +176,7 @@ class ScorecardsGetTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping categories requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping categories requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         print("Attempting to get scorecard categories...")
@@ -202,7 +202,7 @@ class ScorecardsGetTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping category by ID requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping category by ID requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         # Ensure we have cached category IDs
@@ -234,7 +234,7 @@ class ScorecardsGetTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping query params requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping query params requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         print("Testing scorecards list with query parameters...")
@@ -266,7 +266,7 @@ class ScorecardsGetTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping nested data requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping nested data requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         # Ensure we have cached scorecard IDs

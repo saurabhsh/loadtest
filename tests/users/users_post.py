@@ -111,7 +111,7 @@ class UsersPostTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping basic create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping basic create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         unique_email = self._get_unique_email("postuser")
@@ -159,7 +159,7 @@ class UsersPostTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping all fields create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping all fields create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         unique_email = self._get_unique_email("fulluser")
@@ -241,7 +241,7 @@ class UsersPostTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping minimal create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping minimal create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         unique_email = self._get_unique_email("minimaluser")

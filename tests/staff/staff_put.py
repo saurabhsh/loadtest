@@ -163,7 +163,7 @@ class StaffPutTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping upsert requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping upsert requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         unique_email = self._get_unique_email("upsertstaff")
@@ -231,7 +231,7 @@ class StaffPutTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping employee upsert requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping employee upsert requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         unique_email = self._get_unique_email("upsertemployee")
@@ -297,7 +297,7 @@ class StaffPutTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping supervisor upsert requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping supervisor upsert requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         unique_email = self._get_unique_email("upsertsupervisor")
@@ -357,7 +357,7 @@ class StaffPutTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping validation requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping validation requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         unique_email = self._get_unique_email("minimalstaff")

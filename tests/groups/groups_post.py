@@ -81,7 +81,7 @@ class GroupsPostTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping basic create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping basic create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         group_name = self._get_unique_group_name("BasicGroup")
@@ -118,7 +118,7 @@ class GroupsPostTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping description create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping description create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         group_name = self._get_unique_group_name("DescGroup")
@@ -156,7 +156,7 @@ class GroupsPostTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping all fields create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping all fields create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         group_name = self._get_unique_group_name("FullGroup")
@@ -197,7 +197,7 @@ class GroupsPostTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping location/notes create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping location/notes create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         group_name = self._get_unique_group_name("LocationGroup")
@@ -237,7 +237,7 @@ class GroupsPostTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping business scenario create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping business scenario create requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         # Business scenario group types

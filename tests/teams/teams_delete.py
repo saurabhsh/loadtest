@@ -124,7 +124,7 @@ class TeamsDeleteTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping delete requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping delete requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         # Create a test team first, then delete it
@@ -156,7 +156,7 @@ class TeamsDeleteTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping create-and-delete requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping create-and-delete requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         # Create a test team first
@@ -189,7 +189,7 @@ class TeamsDeleteTest(BaseResourceTest):
         # Check if we should stop creating new requests
         if self._should_stop_creating_requests():
             elapsed = time.time() - self._test_start_time
-            print(f"⏰ Stopping safe delete requests - {elapsed:.1f}s elapsed, stopping 5s before end")
+            print(f"[INFO] Stopping safe delete requests - {elapsed:.1f}s elapsed, stopping 5s before end")
             return
         
         # Create multiple test teams and delete them
